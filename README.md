@@ -2,5 +2,6 @@
 ADC Fall 2017 Final Project
 
 put `uhd-usrp.rules` into `/etc/udev/rules.d/`
+
 `sudo udevadm control --reload-rules
 sudo udevadm trigger`
