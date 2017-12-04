@@ -6,7 +6,9 @@ Goal: Transmit art using Software Defined Radio
 `sudo udevadm control --reload-rules
 sudo udevadm trigger`
 
-We are assigned `2.492GHz` to `2.494GHz`
+We are assigned `2.492GHz` to `2.494GHz` -> `2MHz bandwidth`
+Okay to stay `250KHz` from edges.
+
 1. How do we transmit our data
 Using software defined radios, encode arbitrary digital data into pulses that are visually recognizable images when viewed in a spectrogram.
 
