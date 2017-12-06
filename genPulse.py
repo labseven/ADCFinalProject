@@ -25,25 +25,14 @@ def genFwdSlash(totalTime, sampleRate):
     # totalTime = # of seconds
     # # of samples = sampleRate * totalTime
     t = np.linspace(0, totalTime, totalTime * sampleRate)
-    freqs = np.linspace(0, 2e6, totalTime * sampleRate - 1)  # hz
-
-    # dphi/dt = 2*pi*f(t)
-    # find phase differences than cumsum to get the total phase offset at each point
-    dts = np.diff(t)
-    dphis = 2*np.pi*freqs*dts
-    phases = np.cumsum(dphis)
-    phases = np.insert(phases, 0, 0)
-    return np.cos(phases)
+    freqs = np.linspace(0, 2e6, totalTime * sampleRate)  # hz
+    return genSig(t, freqs)
 
 
 def genBackSlash(totalTime, sampleRate):
     t = np.linspace(0, totalTime, totalTime * sampleRate)
-    freqs = np.linspace(2e6, 0, totalTime * sampleRate - 1)  # hz
-    dts = np.diff(t)
-    dphis = 2*np.pi*freqs*dts
-    phases = np.cumsum(dphis)
-    phases = np.insert(phases, 0, 0)
-    return np.cos(phases)
+    freqs = np.linspace(2e6, 0, totalTime * sampleRate)  # hz
+    return genSig(t, freqs)
 
 
 def genFwdAngleBracket(totalTime, sampleRate):
@@ -52,6 +41,21 @@ def genFwdAngleBracket(totalTime, sampleRate):
 
 def genBackAngleBracket(totalTime, sampleRate):
     pass
+
+
+# Generates a signal of varying frequencies
+# ts are the time domains
+# freqs are the frequencies at corresponding times
+# len(ts) must equal len(freqs) = len(return value)
+def genSig(ts, freqs):
+    # dphi/dt = 2*pi*f(t)
+    # find phase differences than cumsum to get the total phase offset at each point
+    dts = np.diff(ts)
+    dphis = 2*np.pi*freqs[:-1]*dts
+    phases = np.cumsum(dphis)
+    phases = np.insert(phases, 0, 0)
+    return np.cos(phases)
+
 
 
 fs = 5e6
