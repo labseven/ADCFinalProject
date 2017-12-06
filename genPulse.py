@@ -64,9 +64,12 @@ def genSig(ts, freqs):
 
 
 fs = 5e6
-x = genPulse(3, 0.1, fs)
+data = [0, 1, 2, 3, 0, 0, 1, 1, 1, 1, 0, 1, 2, 2, 1, 2]
 
-f, t, Sxx = signal.spectrogram(x, fs)
+sigs = map(lambda d: genPulse(d, 0.1, fs), data)
+sig = np.hstack(sigs)
+
+f, t, Sxx = signal.spectrogram(sig, fs)
 plt.pcolormesh(t, f, Sxx)
 plt.ylabel('Frequency [Hz]')
 plt.xlabel('Time [sec]')
