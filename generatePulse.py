@@ -24,8 +24,9 @@ def generateFwdSlash(totalTime, sampleRate):
     # fs = samples/s
     # totalTime = # of seconds
     # # of samples = sampleRate * totalTime
-    w = 3e6  # hz
-    return np.cos(2*np.pi*w*np.linspace(0, totalTime, totalTime * sampleRate))
+    t = np.linspace(0, totalTime, totalTime * sampleRate)
+    freqs = np.linspace(0, 1e6, totalTime * sampleRate)  # hz
+    return np.cos(2*np.pi*np.multiply(freqs, t))
 
 
 def generateBackSlash(totalTime, sampleRate):
@@ -39,7 +40,7 @@ def generateFwdAngleBracket(totalTime, sampleRate):
 def generateBackAngleBracket(totalTime, sampleRate):
     pass
 
-fs = 10e6
+fs = 4e6
 x = generatePulse(0, 0.1, fs)
 
 f, t, Sxx = signal.spectrogram(x, fs)
