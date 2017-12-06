@@ -36,11 +36,17 @@ def genBackSlash(totalTime, sampleRate):
 
 
 def genFwdAngleBracket(totalTime, sampleRate):
-    pass
+    t = np.linspace(0, totalTime, totalTime * sampleRate)
+    freqs1 = np.linspace(0, 1e6, totalTime * sampleRate)
+    freqs2 = np.linspace(2e6, 1e6, totalTime * sampleRate)
+    return genSig(t, freqs1) + genSig(t, freqs2)
 
 
 def genBackAngleBracket(totalTime, sampleRate):
-    pass
+    t = np.linspace(0, totalTime, totalTime * sampleRate)
+    freqs1 = np.linspace(1e6, 2e6, totalTime * sampleRate)
+    freqs2 = np.linspace(1e6, 0, totalTime * sampleRate)
+    return genSig(t, freqs1) + genSig(t, freqs2)
 
 
 # Generates a signal of varying frequencies
@@ -57,9 +63,8 @@ def genSig(ts, freqs):
     return np.cos(phases)
 
 
-
 fs = 5e6
-x = genPulse(1, 0.1, fs)
+x = genPulse(3, 0.1, fs)
 
 f, t, Sxx = signal.spectrogram(x, fs)
 plt.pcolormesh(t, f, Sxx)
