@@ -9,18 +9,18 @@ import matplotlib.pyplot as plt
 # 2: >
 # 3: <
 # bottom is low frequency, top is high
-def generatePulse(bit, totalTime, sampleRate):
+def genPulse(bit, totalTime, sampleRate):
     if bit == 0:
-        return generateFwdSlash(totalTime, sampleRate)
+        return genFwdSlash(totalTime, sampleRate)
     if bit == 1:
-        return generateBackSlash(totalTime, sampleRate)
+        return genBackSlash(totalTime, sampleRate)
     if bit == 2:
-        return generateFwdAngleBracket(totalTime, sampleRate)
+        return genFwdAngleBracket(totalTime, sampleRate)
     if bit == 3:
-        return generateBackAngleBracket(totalTime, sampleRate)
+        return genBackAngleBracket(totalTime, sampleRate)
 
 
-def generateFwdSlash(totalTime, sampleRate):
+def genFwdSlash(totalTime, sampleRate):
     # fs = samples/s
     # totalTime = # of seconds
     # # of samples = sampleRate * totalTime
@@ -36,7 +36,7 @@ def generateFwdSlash(totalTime, sampleRate):
     return np.cos(phases)
 
 
-def generateBackSlash(totalTime, sampleRate):
+def genBackSlash(totalTime, sampleRate):
     t = np.linspace(0, totalTime, totalTime * sampleRate)
     freqs = np.linspace(2e6, 0, totalTime * sampleRate - 1)  # hz
     dts = np.diff(t)
@@ -46,16 +46,16 @@ def generateBackSlash(totalTime, sampleRate):
     return np.cos(phases)
 
 
-def generateFwdAngleBracket(totalTime, sampleRate):
+def genFwdAngleBracket(totalTime, sampleRate):
     pass
 
 
-def generateBackAngleBracket(totalTime, sampleRate):
+def genBackAngleBracket(totalTime, sampleRate):
     pass
 
 
 fs = 5e6
-x = generatePulse(1, 0.1, fs)
+x = genPulse(1, 0.1, fs)
 
 f, t, Sxx = signal.spectrogram(x, fs)
 plt.pcolormesh(t, f, Sxx)
