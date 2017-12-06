@@ -21,12 +21,27 @@ def generatePulse(bit, totalTime, sampleRate):
 
 
 def generateFwdSlash(totalTime, sampleRate):
+    numSamples = int(totalTime * sampleRate)
     # fs = samples/s
     # totalTime = # of seconds
     # # of samples = sampleRate * totalTime
-    t = np.linspace(0, totalTime, totalTime * sampleRate)
-    freqs = np.linspace(0, 1e6, totalTime * sampleRate)  # hz
-    return np.cos(2*np.pi*np.multiply(freqs, t))
+    t = np.linspace(0, totalTime, numSamples)
+
+
+    """ Interestingly, when using just linspace, then it reaches 4MHz.
+    When doing discrete climbing, it goes only up to 2MHz"""
+    # freqs = np.linspace(0, 2e6, numSamples*10000)
+
+    freqs = np.full(numSamples // 10000, 2e6)
+    freqs[:(numSamples// 10000) //2] = np.linspace(0, 2e6, (numSamples// 10000) //2)  # hz
+    freqs = np.repeat(freqs, 10000)
+
+
+    plt.plot(t,freqs)
+    plt.plot(t, t*freqs)
+    plt.show()
+
+    return np.cos(2*np.pi*t*freqs)
 
 
 def generateBackSlash(totalTime, sampleRate):
@@ -40,11 +55,11 @@ def generateFwdAngleBracket(totalTime, sampleRate):
 def generateBackAngleBracket(totalTime, sampleRate):
     pass
 
-fs = 4e6
-x = generatePulse(0, 0.1, fs)
+fs = 10e6
+x = generatePulse(0, .1, fs)
 
-f, t, Sxx = signal.spectrogram(x, fs)
-plt.pcolormesh(t, f, Sxx)
-plt.ylabel('Frequency [Hz]')
+f, t, Sxx = signal.spectrogram(x, fs, nperseg=1024)
+plt.pcolormesh(t, f/1e6, Sxx)
+plt.ylabel('Frequency [MHz]')
 plt.xlabel('Time [sec]')
 plt.show()
