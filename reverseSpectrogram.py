@@ -23,7 +23,7 @@ im = np.zeros((f.shape[0]*2, f.shape[1]))
 im[:][:f.shape[0]] = f
 im[:][f.shape[0]:] = f[::-1]
 
-plt.imshow(im)
+plt.imshow(im.T)
 plt.show()
 
 x = np.zeros(im.shape[0]*im.shape[1])
@@ -32,6 +32,7 @@ for i, column in enumerate(im.T):
     signalWindow = np.fft.ifft(column)
     x[i*im.shape[0]:(i+1)*im.shape[0]] = signalWindow
 
+x = x/max(abs(x))
 with open("pacmansignal.pk", "wb") as outfile:
     pickle.dump(x, outfile)
 
