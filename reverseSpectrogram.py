@@ -2,6 +2,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import misc
 from scipy import signal
+import pickle
+
+
+# Need to figure out how many samples 'tall' the image should be
+fs = 10e6
+t = np.linspace(0,.1,fs*.1)
+s = np.cos(2*np.pi*t*2e6)
+
+fftCos = np.fft.fft(s)
+print(fftCos.shape)
+plt.plot(fftCos)
+plt.show()
+
 
 f = misc.imread('pacman.png', flatten=True)
 
@@ -19,12 +32,14 @@ for i, column in enumerate(im.T):
     signalWindow = np.fft.ifft(column)
     x[i*im.shape[0]:(i+1)*im.shape[0]] = signalWindow
 
+with open("pacmansignal.pk", "wb") as outfile:
+    pickle.dump(x, outfile)
 
 plt.plot(x.real)
 plt.plot(x.imag)
 plt.show()
 
-f, t, Sxx = signal.spectrogram(x, fs=10, nperseg=f.shape[1])
+f, t, Sxx = signal.spectrogram(x, fs=fs, nperseg=f.shape[1])
 plt.pcolormesh(t, f/1e6, Sxx)
 plt.ylabel('Frequency [MHz]')
 plt.xlabel('Time [sec]')
