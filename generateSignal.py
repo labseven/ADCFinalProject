@@ -6,26 +6,43 @@ import matplotlib.pyplot as plt
 import pickle
 
 fs = 10e6 # Hz
-pulseLen = 0.1 # sec
+pulseLen = 0.01 # sec
 signalLen = 10 # sec
 
-numSamples = int(fs * signalLen)
+def writeSignal(mySignal):
+    with open("sendSignal.pk", "wb") as outfile:
+        pickle.dump(mySignal, outfile)
 
+    with open("sendSignal.bin", "wb") as outfile:
+        mySignal.tofile(outfile)
 
-with open("pacmansignal.pk", "rb") as infile:
-    pacmanPulse = pickle.load(infile)
+def importPulses(numPulses):
+    pulses = []
+    for i in range(numPulses):
+        filename ='pulses/{}.pk'.format(i)
+        print("importing {}".format(filename))
 
-# sigOut = np.random.random(numSamples) * 0.01
-sigOut = np.zeros(numSamples)
+        with open(filename, "rb") as infile:
+            pulse = pickle.load(infile)
+            pulses.append(pulse)
 
-pulseLoc = np.random.randint(numSamples - len(pacmanPulse))
-# print(pulseLoc)
-sigOut[pulseLoc:pulseLoc+len(pacmanPulse)] += pacmanPulse
+    pulseLen = len(pulses[0])
+    for pulse in pulses:
+        assert len(pulse) == pulseLen
 
+    return pulses
 
+if __name__ == '__main__':
+    data=[0,1,0,1,1,1,0,0,1]
+    pulses = importPulses(2)
 
-with open("signalIn.pk", "wb") as outfile:
-    pickle.dump(sigOut, outfile)
+    pulseLen = len(pulses[0])
+    numSamples = int(pulseLen * len(data))
 
-with open("pacmansignalwithOffset.bin", "wb") as outfile:
-    x.tofile(outfile)
+    sigOut = np.zeros(numSamples, dtype=np.complex64)
+
+    for i, x in enumerate(data):
+        # print("{} : {}".format(i*pulseLen, (i+1)*pulseLen))
+        sigOut[i*pulseLen:(i+1)*pulseLen] = pulses[x]
+
+    writeSignal(sigOut)
