@@ -5,10 +5,6 @@ from numpy import pi
 import matplotlib.pyplot as plt
 import pickle
 
-fs = 10e6 # Hz
-pulseLen = 0.01 # sec
-signalLen = 10 # sec
-
 def writeSignal(mySignal):
     with open("sendSignal.pk", "wb") as outfile:
         pickle.dump(mySignal, outfile)
@@ -33,8 +29,11 @@ def importPulses(numPulses):
     return pulses
 
 if __name__ == '__main__':
-    data=[0,1,0,1,1,1,0,0,1]
+    data=[0,1,0,1,1,1,0,0,1,1,1,1,1,1]
     pulses = importPulses(2)
+
+    fs = 320e3
+    print("fs: {}".format(fs))
 
     pulseLen = len(pulses[0])
     numSamples = int(pulseLen * len(data))
@@ -45,4 +44,5 @@ if __name__ == '__main__':
         # print("{} : {}".format(i*pulseLen, (i+1)*pulseLen))
         sigOut[i*pulseLen:(i+1)*pulseLen] = pulses[x]
 
+    print("sigOut: {} samples {} seconds".format(len(sigOut), len(sigOut)/fs))
     writeSignal(sigOut)
