@@ -37,7 +37,7 @@ print(im.shape)
 print(len(im.T[0]))
 print(np.max(fftfreq(len(im.T[0]))))
 
-x = np.zeros(im.shape[0]*im.shape[1])
+x = np.zeros(im.shape[0]*im.shape[1], dtype=np.complex64)
 
 # slice up image and take ifft of each slice
 for i, column in enumerate(im.T[::21]):
@@ -50,12 +50,21 @@ for i, column in enumerate(im.T[::21]):
     x[i*im.shape[0]:(i+1)*im.shape[0]] = signalWindow
 
 x = x/max(abs(x))
-with open("dotsignal.pk", "wb") as outfile:
+
+with open("pacmansignal.pk", "wb") as outfile:
     pickle.dump(x, outfile)
 
-# plt.plot(x.real)
-# # plt.plot(x.imag)
-# plt.show()
+with open("pacmansignal.bin", "wb") as outfile:
+    x.tofile(outfile)
+
+print("save successful")
+
+plt.plot(x.real)
+plt.plot(x.imag)
+plt.title("Signal")
+plt.xaxis("time")
+plt.yaxis("magnitude")
+plt.show()
 
 f, t, Sxx = signal.spectrogram(x, fs=fs, nperseg=f.shape[1]*2)
 print(t)

@@ -21,3 +21,14 @@ pip2 install scipy
 
 binaryRead.py can read the binary file
 listenTo2.4GHz.py reads 2.4GHz
+
+
+
+##
+
+Writing a np array to bytes:
+`with open("sendbytes", "wb") as outfile:
+ sigOut.tofile(outfile)`
+
+Binary read:
+`f = scipy.fromfile(open("inFile"), dtype=scipy.complex64)`
