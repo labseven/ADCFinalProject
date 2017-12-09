@@ -6,12 +6,23 @@ Marie-Caroline Fink, Adam Novotny, Jonah Spear
 
 ### Overview
 
-The goal of this project is to encode and transmit digital data in a way that the transmission signal is a human-recognizable image. Previous work includes Aphex Twin's song [Equation] which when viewed through a spectrogram looks like a human face.
+The goal of this project was to transmit binary data using a signal that looks like a game of Pacman. We were ultimately successful in transmitting simple binary data, although our transmission times were quite slow given the constraints of our method.
+
+# Insert figure here showing transmission/results
+
+### Background
+
+The goal of this project was to encode and transmit digital data in a way that the transmission signal is human-recognizable.
+
+How does this work? A spectrogram is a graph which displays frequencies of a signal on the y axis and transmission time along the x axis. By varying the signal precisely, one can draw images in this way. This has been used to embed images in songs, as shown below (Aphex Twin's Equation).
 
 <img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Equation_Aphex_Twin_Spectrogram.gif" alt="Spectrogram of Aphex Twin's Equation" width="1000" height="500">
 
+We focused on transmitting binary data using something more innocuous, namely symbols from the game Pacman. 
 
-We focused on transmitting binary data using something more innocuous, namely symbols from the game Pacman.
+### Methods
+
+
 
 
 
