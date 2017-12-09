@@ -45,7 +45,7 @@ for i, pulse in enumerate(pulses):
     print("convolve {}".format(i))
     convolve = signal.fftconvolve(abs(recSignal), pulse)
     convolves.append(convolve)
-    saveConvolve(i, convolve)
+    # saveConvolve(i, convolve)
 
 for convolve in convolves:
     plt.plot(abs(convolve))
