@@ -5,14 +5,31 @@ from scipy import misc
 from scipy import signal
 import pickle
 
-with open("pacmansignal.pk", "rb") as infile:
-    pacmanPulse = pickle.load(infile)
+def importPulses(numPulses):
+    pulses = []
+    for i in range(numPulses):
+        filename ='pulses/{}.pk'.format(i)
+        print("importing {}".format(filename))
 
-sigIn = scipy.fromfile(open("inFile"), dtype=scipy.complex64)
+        with open(filename, "rb") as infile:
+            pulse = pickle.load(infile)
+            pulses.append(pulse)
 
-# with open("signalIn.pk", "rb") as infile:
-#     sigIn = pickle.load(infile)
+    pulseLen = len(pulses[0])
+    for pulse in pulses:
+        assert len(pulse) == pulseLen
 
+    return pulses
+
+def importSignal():
+    print("importing signal")
+    sigIn = scipy.fromfile(open("usrpSink.bin"), dtype=scipy.complex64)
+    return sigIn
+
+def saveConvolve(filename, convolve):
+    print("saving pulse {}: {} samples".format(filename, len(convolve)))
+    with open("pulses/out{}.pk".format(filename), "wb") as outfile:
+        pickle.dump(convolve, outfile)
 
 # f, t, Sxx = signal.spectrogram(sigIn.real)
 # plt.pcolormesh(t, f/1e6, Sxx)
@@ -20,15 +37,16 @@ sigIn = scipy.fromfile(open("inFile"), dtype=scipy.complex64)
 # plt.xlabel('Time [sec]')
 # plt.show()
 
+pulses = importPulses(2)
+recSignal = importSignal()
 
-print(pacmanPulse.shape)
-print(sigIn.shape)
+convolves = []
+for i, pulse in enumerate(pulses):
+    print("convolve {}".format(i))
+    convolve = signal.fftconvolve(abs(recSignal), pulse)
+    convolves.append(convolve)
+    saveConvolve(i, convolve)
 
-# plt.plot(sigIn[::1000])
-# plt.show()
-
-x = signal.fftconvolve(sigIn, pacmanPulse)
-
-print(len(x))
-plt.plot(x[::int(len(x)/100000)])
+for convolve in convolves:
+    plt.plot(abs(convolve))
 plt.show()
