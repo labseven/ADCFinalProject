@@ -15,12 +15,17 @@ numSamples = int(fs * signalLen)
 with open("pacmansignal.pk", "rb") as infile:
     pacmanPulse = pickle.load(infile)
 
-sigOut = np.random.random(numSamples) * 0.01
+# sigOut = np.random.random(numSamples) * 0.01
+sigOut = np.zeros(numSamples)
 
 pulseLoc = np.random.randint(numSamples - len(pacmanPulse))
 # print(pulseLoc)
 sigOut[pulseLoc:pulseLoc+len(pacmanPulse)] += pacmanPulse
 
 
+
 with open("signalIn.pk", "wb") as outfile:
     pickle.dump(sigOut, outfile)
+
+with open("pacmansignalwithOffset.bin", "wb") as outfile:
+    x.tofile(outfile)
