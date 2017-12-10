@@ -4,13 +4,13 @@ Marie-Caroline Fink, Adam Novotny, Jonah Spear
 
 <img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/pacman_banner.jpg" alt="Pacman Banner" width="1000" height="200">
 
-### Overview
+## Overview
 
 The goal of this project was to transmit binary data using a signal that looks like a game of Pacman. We were ultimately successful in transmitting simple binary data, although our transmission times were quite slow given the constraints of our method.
 
 # Insert figure here showing transmission/results
 
-### Background
+## Background
 
 The goal of this project was to encode and transmit digital data in a way that the transmission signal is human-recognizable.
 
@@ -18,23 +18,23 @@ How does this work? A spectrogram is a graph which displays frequencies of a sig
 
 <img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Equation_Aphex_Twin_Spectrogram.gif" alt="Spectrogram of Aphex Twin's Equation" width="1000" height="500">
 
-We focused on transmitting binary data using something more innocuous, namely symbols from the game Pacman. 
+We focused on transmitting binary data using something more innocuous, namely symbols from the game Pacman.
 
-### Methods
-
-
+## Methods
 
 
+### Huffman Coding
+We implemented [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding) to compress text messages. Huffman encoding creates an optimal encoding tree, by analyzing the order of occurrence of symbols. We trained our tree with [hipster ipsum](https://hipsum.co/), to get a similar symbol frequency to what we (being millenials) want to send.
 
-More conc 
+This compression compensates slightly for our slow symbol rate.
+
+
+
+More conc
 
 Goal: Transmit art using Software Defined Radio
 
-`sudo udevadm control --reload-rules
-sudo udevadm trigger`
 
-We are assigned `2.492GHz` to `2.494GHz` -> `2MHz bandwidth`
-Okay to stay `250KHz` from edges.
 
 1. How do we transmit our data
 Using software defined radios, encode arbitrary digital data into pulses that are visually recognizable images when viewed in a spectrogram.
