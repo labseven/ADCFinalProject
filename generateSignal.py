@@ -4,6 +4,8 @@ import numpy as np
 from numpy import pi
 import matplotlib.pyplot as plt
 import pickle
+import sys
+from huffmanEncoding import *
 
 def writeSignal(mySignal):
     with open("sendSignal.pk", "wb") as outfile:
@@ -29,7 +31,11 @@ def importPulses(numPulses):
     return pulses
 
 if __name__ == '__main__':
-    data=[0,1,0,1,1,1,0,0,1,1,1,1,1,1]
+    message = sys.argv[1]
+
+    _, huffDict = genHuffmanFromFile('english.txt')
+    data = encodeHuffman(huffDict, message)
+
     pulses = importPulses(2)
 
     fs = 320e3
