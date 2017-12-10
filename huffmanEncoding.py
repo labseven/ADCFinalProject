@@ -22,8 +22,8 @@ def genHuffmanTree(text):
         nodes_remain.append(Tree(data=char[0], weight=char[1]))
         nodes_dict[char[0]] = nodes_remain[-1]
 
-    for node in nodes_remain[::-1]:
-        print(node)
+    # for node in nodes_remain[::-1]:
+    #     print(node)
 
     while len(nodes_remain) >= 2:
         node1 = nodes_remain.pop()
