@@ -30,11 +30,27 @@ def importPulses(numPulses):
 
     return pulses
 
+def packetizeData(data, header=[1,0]):
+    # Make data divisible by 8
+    data = data + [0]*(len(data)%8)
+
+    stream = []
+    for i in xrange(len(data)/8):
+        packetData = header + data[i*8:(i+1)*8]
+        # Add error correction bit
+        packetData.append((sum(packetData)%2))
+        print(packetData)
+        stream.append(packetData)
+
+    return stream
+
 if __name__ == '__main__':
     message = sys.argv[1]
 
     _, huffDict = genHuffmanFromFile('english.txt')
     data = encodeHuffman(huffDict, message)
+
+    bitstream = packetizeData(data)
 
     pulses = importPulses(2)
 
@@ -42,13 +58,17 @@ if __name__ == '__main__':
     print("fs: {}".format(fs))
 
     pulseLen = len(pulses[0])
-    numSamples = int(pulseLen * len(data))
+    numSamples = int(pulseLen * (len(bitstream[0]) + 1))
 
-    sigOut = np.zeros(numSamples, dtype=np.complex64)
+    signals = np.zeros((len(bitstream), numSamples), dtype=np.complex64)
+    for i, packet in enumerate(bitstream):
+        for j, bit in enumerate(packet):
+            signals[i][j*pulseLen:(j+1)*pulseLen] = pulses[bit]
 
-    for i, x in enumerate(data):
-        # print("{} : {}".format(i*pulseLen, (i+1)*pulseLen))
-        sigOut[i*pulseLen:(i+1)*pulseLen] = pulses[x]
+    sigOut = signals.flatten()
+
+    # plt.plot(sigOut[::100])
+    # plt.show()
 
     print("sigOut: {} samples {} seconds".format(len(sigOut), len(sigOut)/fs))
     writeSignal(sigOut)
