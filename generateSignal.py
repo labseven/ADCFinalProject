@@ -32,14 +32,14 @@ def importPulses(numPulses):
 
 def packetizeData(data, header=[1,0]):
     # Make data divisible by 8
-    data = data + [0]*(len(data)%8)
+    data = data + [0]*(8-len(data)%8)
 
     stream = []
     for i in xrange(len(data)/8):
         packetData = header + data[i*8:(i+1)*8]
         # Add error correction bit
         packetData.append((sum(packetData)%2))
-        print(packetData)
+        # print(packetData)
         stream.append(packetData)
 
     return stream
@@ -51,6 +51,7 @@ if __name__ == '__main__':
     data = encodeHuffman(huffDict, message)
 
     bitstream = packetizeData(data)
+    print(bitstream)
 
     pulses = importPulses(2)
 
