@@ -38,22 +38,29 @@ Our transmission method is as follows:
 3. Map each chunk onto a different type of pulse and concatenate pulses together.
 4. Transmit pulses over using a USRP.
 
-#### Image -> Pulse
+#### Reverse Spectrogram
 
 The most complicated step of this pipeline is step #1, constructing pulses that will look like images when viewed on a spectrogram. Our method for this is as follows:
 1. Duplicate image on x axis.
 2. Slice up image and take the Inverse Fourier Transform of each slice.
 3. Append the slices together and normalize.
 
-To transmit an image, first we duplicate it along the X axis so that it's signal will be completely real.
+Below is our sample image, duplicated along the x axis (so that the transmitted signal will be real).
 
-<img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/duplicated_image.png" alt="Pacman Duplicated">
+<img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/duplicated_image.png" alt="Pacman Duplicated">
 
-3 slices are plotted hore for clarity, although in reality many more are used to get a higher resolution. The same slices above from above image are plotted in the upper figure below. Since the image is of uniform color, the slices show up as modulated low pass filters. BFor each slice we then take the inverse fourier transform. The shape of the IFTs are sincs modulated with a cosine.   
+3 slices are plotted hore for clarity, although in reality many more are used to get a higher resolution. The same slices above from above image are plotted in the upper figure below. Since the image is of uniform color, the slices show up as modulated low pass filters. For each slice we then take the inverse fourier transform. The shape of the IFTs are sincs modulated with a cosine.   
 
-<img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Slices.png" alt="Pacman Duplicated">
+<img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Slices.png" alt="Slices">
 
-Why take the IFFT at all? 
+Again, the sincs in the above picture are superimposed only for clarity. In reality, we append each sinc one after another to get our time-domain signal. This signal has been carefully constructed to look like our sample image when viewed on a spectrogram. Each straight vertical line in the below image is really a sinc.
+
+<img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Pacman_Pulse.png" alt="Pacman Pulse">
+
+Finally, when viewed on a spectrogram with box width equal to the length of each slice, we get the following image:
+
+<img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/media/reverseSpectrogram.png" alt="Pacman Spectrogram" width="800" height="700">
+
 
 ### Huffman Coding
 We implemented [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding) to compress text messages. Huffman encoding creates an optimal coding scheme, by analyzing the order of occurrence of symbols. We trained our tree with [hipster ipsum](https://hipsum.co/), to get a similar symbol frequency to what we (being millenials) want to send.
