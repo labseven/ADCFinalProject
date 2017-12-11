@@ -59,6 +59,7 @@ def genHuffmanTree(text):
         node1.parent = new_node
         node2.parent = new_node
         nodes_remain.append(new_node)
+        # Inoptimal sorting. A better thing to do would be to append new nodes to a second list, and  compare the first two nodes in each list 
         nodes_remain = sorted(nodes_remain, key=lambda node: node.weight)[::-1]
 
     return nodes_remain[0], nodes_dict
