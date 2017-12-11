@@ -1,5 +1,31 @@
 from collections import Counter, deque
 
+"""
+Huffman Coding library.
+Author: Adam Novotny
+
+genHuffmanTree(text)
+    Given text, creates a huffman coding tree
+    Returns: root, nodesDict {symbol: node}
+
+genHuffmanFromFile(filename)
+    Given a text file, generates a huffman coding tree
+    Returns: root, nodesDict {symbol: node}
+
+decodeHuffman(root, data)
+    Given the root of a huffman tree (Tree()) and data ([1, 0]), decodes the data to symbols
+    Returns: list of symbols
+
+genHuffmanEncodeDict(root)
+    Given the root of a huffman tree (Tree()), generates a dict to encode symbols
+    Returns: dict {symbol: code} ( {'a': (1,0)} )
+
+encodeHuffman(treeDict, message)
+    given a huffman coding dict, encodes a message (str)
+    Returns: list of bits ( [1,0,0,1] )
+"""
+
+
 class Tree():
     def __init__(self, data=None, left=None, right=None, parent=None, weight=None, layer=None):
         self.left = left
@@ -119,15 +145,13 @@ def genHuffmanEncodeDict(root):
 
     return huffDict
 
-
-
 def encodeHuffman(treeDict, message):
     data = []
     for c in message:
-        for i in treeDict[c]:
-            data.append(i)
+        data = data + list(treeDict[c])
 
     return data
+
 
 if __name__ == '__main__':
     with open("english.txt", "r") as infile:
