@@ -22,6 +22,20 @@ We focused on transmitting binary data using something more innocuous, namely sy
 
 ## Methods
 
+Our encoding scheme turns a sequence of bits into a sequence of pulses, which can then be turned back into bits after transmission using a cross correlation function.
+
+# Insert picture of 0s and 1s translated to symbols here
+
+### Transmission
+
+To transmit an image, first we duplicate it along the X axis so that it's signal will be completely real.
+
+<img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/duplicated_image.png" alt="Pacman Duplicated">
+
+Slices of this image are then passed through an inverse fourier transform. 3 slices here are plotted for clarity, although in reality many more are used to get a higher resolution. The same slices above from above are plotted below on one axis (notice x axis is the same). Since the image is of uniform color, the slices show up as modulated low pass filters, so the IFFT of each slice is a sinc multiplied with a cosine.  
+
+<img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Slices.png" alt="Pacman Duplicated">
+
 
 ### Huffman Coding
 We implemented [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding) to compress text messages. Huffman encoding creates an optimal coding scheme, by analyzing the order of occurrence of symbols. We trained our tree with [hipster ipsum](https://hipsum.co/), to get a similar symbol frequency to what we (being millenials) want to send.
