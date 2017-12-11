@@ -30,7 +30,7 @@ importPulses(numPulses)
 
 packetizeData(data, header=[1,0])
     packetizes a datastream
-    [1,0] + header + [error code bit]
+    [1,0] + header + [parity bit]
     sum(packet)%2 = 0
     Returns: list of packets [[1,0,1 ... 0], [1,0,0 ... 1]]
 """
