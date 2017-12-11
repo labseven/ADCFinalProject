@@ -8,23 +8,24 @@ import pickle
 from numpy.fft import fftfreq, ifft, fftshift
 
 
-def reverseSpectrogam(filename, downsample=10):
+def reverseSpectrogam(filename, downsample=0.05):
         f = misc.imread(filename, flatten=True)
-        # f = f[::100][::100]
         im = np.zeros((f.shape[0]*2, f.shape[1]))
         im[:][:f.shape[0]] = f
         im[:][f.shape[0]:] = f[::-1]
+        im_ds = misc.imresize(im, downsample)
+        print(im_ds.shape)
 
-        x = np.zeros((im.shape[0]*im.shape[1]) // downsample, dtype=np.complex64)
+        x = np.zeros((im_ds.shape[0]*im_ds.shape[1]), dtype=np.complex64)
 
-        for i, column in enumerate(im.T[::10]):
+        for i, column in enumerate(im_ds.T):
             signalWindow = fftshift(ifft(column))
             # plt.subplot(2, 1, 1)
             # plt.plot(column)
             # plt.subplot(2, 1, 2)
             # plt.plot(fftshift(signalWindow))
             # plt.show()
-            x[i*im.shape[0]:(i+1)*im.shape[0]] = signalWindow
+            x[i*im_ds.shape[0]:(i+1)*im_ds.shape[0]] = signalWindow
 
         # Normalize it to [-1,1]
         x = x/max(abs(x))
