@@ -7,6 +7,34 @@ import pickle
 import sys
 from huffmanEncoding import *
 
+"""
+Signal generation library.
+Author: Adam Novotny
+
+main:
+    Arguments:
+        1: "message"
+    generates huffman code tree
+    encodes message (argv[1]) in huffman codes
+    packetizes data
+    creates signal using pulses
+    saves signal to sendSignal.bin
+
+writeSignal(outSignal)
+    writes a signal to sendSignal.pk and sendSignal.bin
+    Returns: nothing
+
+importPulses(numPulses)
+    imports pulses from pulses/{0-numPulses}.pk
+    Returns: list of pulse data
+
+packetizeData(data, header=[1,0])
+    packetizes a datastream
+    [1,0] + header + [error code bit]
+    sum(packet)%2 = 0
+    Returns: list of packets [[1,0,1 ... 0], [1,0,0 ... 1]]
+"""
+
 def writeSignal(mySignal):
     with open("sendSignal.pk", "wb") as outfile:
         pickle.dump(mySignal, outfile)
