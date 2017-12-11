@@ -31,8 +31,8 @@ def reverseSpectrogam(filename, downsample=10):
 
         return x
 
-def savePulse(filename, pulse):
-    print("saving pulse {}: {} samples".format(filename, len(pulse)))
+def savePulse(filename, pulse, fs=320e3):
+    print("saving pulse {}: {} samples, {} sec".format(filename, len(pulse), len(pulse)/fs))
     with open("pulses/{}.pk".format(filename), "wb") as outfile:
         pickle.dump(pulse, outfile)
 
@@ -40,7 +40,7 @@ def savePulse(filename, pulse):
         pulse.tofile(outfile)
 
 def showSpectrogram(pulse, fs=320e3):
-    f, t, Sxx = signal.spectrogram(pulse, fs=fs)
+    f, t, Sxx = signal.spectrogram(pulse, fs=fs, nperseg=2000)
     # Divide by 1e6 because we are showing Mhz
     plt.pcolormesh(t, f/1e6, Sxx)
     plt.ylabel('Frequency [MHz]')
@@ -52,10 +52,10 @@ if __name__ == '__main__':
 
     pulses = []
     for image in files:
-        pulses.append(reverseSpectrogam(image))
+        pulses.append(reverseSpectrogam(image, downsample=10))
 
     for i, pulse in enumerate(pulses):
         savePulse(i, pulse)
 
-    # for pulse in pulses:
-    #     showSpectrogram(pulse)
+    for pulse in pulses:
+        showSpectrogram(pulse)
