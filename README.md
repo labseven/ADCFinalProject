@@ -1,4 +1,4 @@
-# Wireless Transmission of Digital Data using  
+# Wireless Transmission of Digital Data using Pacman
 ADC Fall 2017 Final Project
 Marie-Caroline Fink, Adam Novotny, Jonah Spear
 
@@ -28,14 +28,32 @@ Our encoding scheme turns a sequence of bits into a sequence of pulses, which ca
 
 ### Transmission
 
+Our goal is to transmit images, particularly those that look like pacman, ghosts, and dots on a spectrogram. A spectrogram is a graph that shows frequency on the y axis against time on the x axis. Amplitudes of different frequencies are shown using colors. Below shows two signals plotted alongside their spectrogram; the first is a pure cosine and the second is a cosine with slowly varying frequency and noise added.
+
+<img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/spectrogram_explanation.png" alt="Spectrogram Explanation"> 
+
+Our transmission method is as follows:
+1. Take the IFT of 4 different images to get our 4 pulses (this only needs to be done once).
+2. Turn our data into 2-bit chunks.
+3. Map each chunk onto a different type of pulse and concatenate pulses together.
+4. Transmit pulses over using a USRP.
+
+#### Image -> Pulse
+
+The most complicated step of this pipeline is step #1, constructing pulses that will look like images when viewed on a spectrogram. Our method for this is as follows:
+1. Duplicate image on x axis.
+2. Slice up image and take the Inverse Fourier Transform of each slice.
+3. Append the slices together and normalize.
+
 To transmit an image, first we duplicate it along the X axis so that it's signal will be completely real.
 
 <img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/duplicated_image.png" alt="Pacman Duplicated">
 
-Slices of this image are then passed through an inverse fourier transform. 3 slices here are plotted for clarity, although in reality many more are used to get a higher resolution. The same slices above from above are plotted below on one axis (notice x axis is the same). Since the image is of uniform color, the slices show up as modulated low pass filters, so the IFFT of each slice is a sinc multiplied with a cosine.  
+3 slices are plotted hore for clarity, although in reality many more are used to get a higher resolution. The same slices above from above image are plotted in the upper figure below. Since the image is of uniform color, the slices show up as modulated low pass filters. BFor each slice we then take the inverse fourier transform. The shape of the IFTs are sincs modulated with a cosine.   
 
 <img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Slices.png" alt="Pacman Duplicated">
 
+Why take the IFFT at all? 
 
 ### Huffman Coding
 We implemented [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding) to compress text messages. Huffman encoding creates an optimal coding scheme, by analyzing the order of occurrence of symbols. We trained our tree with [hipster ipsum](https://hipsum.co/), to get a similar symbol frequency to what we (being millenials) want to send.
