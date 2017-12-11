@@ -10,14 +10,14 @@ from numpy.fft import fftfreq, ifft, fftshift
 
 def reverseSpectrogam(filename, downsample=10):
         f = misc.imread(filename, flatten=True)
-
+        # f = f[::100][::100]
         im = np.zeros((f.shape[0]*2, f.shape[1]))
         im[:][:f.shape[0]] = f
         im[:][f.shape[0]:] = f[::-1]
 
         x = np.zeros((im.shape[0]*im.shape[1]) // downsample, dtype=np.complex64)
 
-        for i, column in enumerate(im.T[::downsample]):
+        for i, column in enumerate(im.T[::10]):
             signalWindow = fftshift(ifft(column))
             # plt.subplot(2, 1, 1)
             # plt.plot(column)
@@ -28,6 +28,9 @@ def reverseSpectrogam(filename, downsample=10):
 
         # Normalize it to [-1,1]
         x = x/max(abs(x))
+        f, t, Sxx = signal.spectrogram(x, 4e6)
+        plt.pcolormesh(t, f, Sxx)
+        plt.show()
 
         return x
 
