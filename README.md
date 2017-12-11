@@ -53,17 +53,3 @@ Repeat this process of connecting the two lowest weighted nodes (looking at the 
 To make encoding easier, we generate a dictionary of symbols to code with a depth first search of the tree, given only the root. Moving to the left node adds a `1` to the code and moving to the right adds a `0` to the code. To encode a message, we iterate through the characters in the message and append the code for each symbol to a bitstream.
 
 To decode a bitstream, we traverse the tree (moving left for `1` and right for `0`) until we hit a leaf. We append that leaf's symbol to the output string, and repeat the process until we run out of bits.
-
-More conc
-
-Goal: Transmit art using Software Defined Radio
-
-
-
-1. How do we transmit our data
-Using software defined radios, encode arbitrary digital data into pulses that are visually recognizable images when viewed in a spectrogram.
-
-For Example:
-0 1 0 -> Dog Cat Dog
-
-Correlating the recieved signal with puluses of Dog and Cat will give us the bits.
