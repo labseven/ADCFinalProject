@@ -59,7 +59,7 @@ def genHuffmanTree(text):
         node1.parent = new_node
         node2.parent = new_node
         nodes_remain.append(new_node)
-        # Inoptimal sorting. A better thing to do would be to append new nodes to a second list, and  compare the first two nodes in each list 
+        # Inoptimal sorting. A better thing to do would be to append new nodes to a second list, and  compare the first two nodes in each list
         nodes_remain = sorted(nodes_remain, key=lambda node: node.weight)[::-1]
 
     return nodes_remain[0], nodes_dict
@@ -121,7 +121,7 @@ def genHuffmanEncodeDict(root):
 
     while True:
         if curNode.data:
-            huffDict[curNode.data] = tuple(curEncode)
+            huffDict[curNode.data.lower()] = tuple(curEncode)
             lastNode = curNode
             curNode = curNode.parent
             curEncode.pop()
@@ -149,7 +149,7 @@ def genHuffmanEncodeDict(root):
 def encodeHuffman(treeDict, message):
     data = []
     for c in message:
-        data = data + list(treeDict[c])
+        data = data + list(treeDict[c.lower()])
 
     return data
 
@@ -162,13 +162,13 @@ if __name__ == '__main__':
     huffDict = genHuffmanEncodeDict(root)
 
     # print(huffDict)
-    # for i in huffDict:
-    #     print("{}: {}".format(i, huffDict[i]))
+    for i in huffDict:
+        print("{}: {}".format(i, huffDict[i]))
 
     message = encodeHuffman(huffDict, "hi, I'm doing well")
 
-    printTree(root)
+    # printTree(root)
 
-    print(message)
+    # print(message)
     decoded = decodeHuffman(root, message)
     print(listToStr(decoded))
