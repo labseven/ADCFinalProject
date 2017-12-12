@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     pulses = []
     for image in files:
-        pulses.append(reverseSpectrogam(image, downsample=10))
+        pulses.append(reverseSpectrogam(image, downsample=100))
 
     for i, pulse in enumerate(pulses):
         savePulse(i, pulse)
