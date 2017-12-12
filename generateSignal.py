@@ -36,8 +36,8 @@ packetizeData(data, header=[1,0])
 """
 
 def writeSignal(mySignal):
-    with open("sendSignal.pk", "wb") as outfile:
-        pickle.dump(mySignal, outfile)
+    # with open("sendSignal.pk", "wb") as outfile:
+    #     pickle.dump(mySignal, outfile)
 
     with open("sendSignal.bin", "wb") as outfile:
         mySignal.tofile(outfile)
@@ -63,7 +63,7 @@ def packetizeData(data, header=[1,0]):
     data = data + [0]*(8-len(data)%8)
 
     stream = []
-    for i in xrange(len(data)/8):
+    for i in range(len(data)//8):
         packetData = header + data[i*8:(i+1)*8]
         # Add error correction bit
         packetData.append((sum(packetData)%2))
