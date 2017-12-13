@@ -63,11 +63,13 @@ An alternative is to stack many cosines with a wide band of frequencies on top o
 
 
 ### Decoding
-To decode the signal we are receiving, we convolve the signal with our different pulses so as to identify where and when each symbol is showing up. This convolve will result in a high amplitude when the symbol is found and lower when it is not. This can be seen here:
+To decode the signal we are receiving, it is convolved with our different pulses so as to identify where and when each symbol is showing up. This convolve will result in a high amplitude when the symbol is found and lower when it is not. This can be seen here:
 
-INSERT
+<img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/ConvolveResults.png" alt="Convolved Results">
 
-In the above image the blue spikes are pacman and the green and blue spikes are ghosts. An envelope is created to find the location of each spike. It is then found whether or not the green and blue overlap, if it does its a ghost, if not its a pacman. Timing is found by transmitting the first four as ghosts to identify the interval inbetween spikes and then use that to find the other spikes. 
+In the above image the blue spikes are pacman and the green and blue spikes are ghosts. An envelope is created to find the location of each spike seen below for  It is then found whether or not the green and blue overlap, if it does its a ghost, if not its a pacman. Timing is found by transmitting the first four as ghosts to identify the interval inbetween spikes and then use that to find the other spikes. 
+
+<img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/FindingEnvelope.png" alt="Finding Timing of Spikes">
 
 
 ## Huffman Coding
