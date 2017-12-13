@@ -85,12 +85,11 @@ data   = symbol
 
 Next, sort the list by weight. Pop the two lowest weighted nodes and create a new parent node for them. The new node has the following properties:
 ```
-right = lowest weight node
-left  = second lowest weight node
-weight = sum of the two children
+right & left = the two lowest weight nodes
+weight       = sum of the two children
 ```
 Insert this new node into a second list.
-Repeat this process of connecting the two lowest weighted nodes (looking at the end of both lists) with a new node, until one node remains. This is the root of the Huffman tree.
+Repeat this process of connecting the two lowest weighted nodes (looking at the ends of both lists) with a new node, until one node remains. This is the root of the Huffman tree.
 >Note: our implementation does not use two buffers. It has to resort the buffer every time. This is not optimal, but the speed loss in unnoticeable on a modern PC.
 
 To make encoding easier, we generate a dictionary of symbols to code with a depth first search of the tree, given only the root. Moving to the left node adds a `1` to the code and moving to the right adds a `0` to the code. To encode a message, we iterate through the characters in the message and append the code for each symbol to a bitstream.
@@ -103,12 +102,12 @@ To improve reliability, we [packetize](https://en.wikipedia.org/wiki/Network_pac
 
 We chunk up the bitstream into 2 bytes per packet (16 bits). Then we append a known header [1, 0, 0].
 
-We add a parity bit to the end for detecting errors. A [parity bit](https://en.wikipedia.org/wiki/Parity_bit) makes makes the sum of the packet even. This way, we can detect one bit flip. Unfortunately, we have no way to communicate back to the transmitter, so we have to accept the data loss and move on with our lives.
+We add a parity bit to the end for detecting errors. A [parity bit](https://en.wikipedia.org/wiki/Parity_bit) makes makes the sum of the packet even. This way, we can detect up to one bit flip. Unfortunately, we have no way to communicate back to the transmitter to ask for a retransmission, so we must accept the data loss and move on with our lives.
 
 This makes our packets 20 bits long, which is 5 samples.
 
-Sending one sample takes 0.26 seconds, so our data rate is approximately 20 bps. This is about 30 times slower than hardware from the 80s. Sending a text message up to 160 characters takes only 2.5 minutes, and shorter tweets can have even 10 second transmission times.
-(that is when using the _fast_ pulses, more artistic pulses can have a baud rate of down to 2)
+Sending one sample takes only 0.25 seconds, so our data rate is approximately 8 bps. This is about 50 times slower than hardware from the 80s. Short tweets can take 10 seconds to transmit, while sending a text message up to 160 characters takes only 2.5 minutes.
+(that is when using the _fast_ pulses, more artistic pulses can have a baud rate of down to 1/2)
 
 An advantage of the slowness is in reliability. Our system has an error rate of only {}.
 
