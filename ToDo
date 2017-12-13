@@ -1,0 +1,14 @@
+figure out bit error rate and transmission speed
+J write detailed report describing the modulation scheme 
+J if we change pulses a little we could make them a lot thinner
+	- we need to be under the USB frequency
+	- cut off empty space on sincs, just use the middle part
+	- make pulses such that they are 32,000 samples long or shorter
+	- generate a few (32k and half of that) so that we can check since the shorter they are the worse of a time we will have correlating
+M demodulation/decoding
+after we get transmission, run it and tune it, because we're really slow so it needs to be good
+
+11-12:30
+
+first get the envelope then threshholds for rising edge
+check if its low and then becomes high
