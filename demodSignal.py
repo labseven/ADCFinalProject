@@ -35,10 +35,10 @@ def saveConvolve(filename, convolve):
 
 def testPacket(packet, asserts=False):
     if asserts:
-        assert packet[:2] == [1,0], "Header is incorrect"
+        assert packet[:2] == [1,0,0], "Header is incorrect"
         assert sum(packet)%2 == 0,  "Error detect bit is wrong"
     else:
-        if packet[:2] != [1,0]:
+        if packet[:2] != [1,0,0]:
             print("ERROR: Header is incorrect:\n{}\n".format(packet))
             return False
         if sum(packet)%2 != 0:
@@ -61,8 +61,7 @@ def unpacketizeData(bitstream):
 # plt.xlabel('Time [sec]')
 # plt.show()
 
-testBitstream = [1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1]
-testBitstream = [1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+testBitstream = [1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0]
 
 
 root, treeDict = genHuffmanFromFile('english.txt')

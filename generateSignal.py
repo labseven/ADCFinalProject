@@ -28,7 +28,7 @@ importPulses(numPulses)
     imports pulses from pulses/{0-numPulses}.pk
     Returns: list of pulse data
 
-packetizeData(data, header=[1,0])
+packetizeData(data, header=[1,0,0])
     packetizes a datastream
     [1,0] + header + [parity bit]
     sum(packet)%2 = 0
@@ -58,7 +58,7 @@ def importPulses(numPulses):
 
     return pulses
 
-def packetizeData(data, header=[1,0]):
+def packetizeData(data, header=[1,0,0]):
     # Make data divisible by 8
     data = data + [0]*(8-len(data)%8)
 
