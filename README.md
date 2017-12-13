@@ -8,8 +8,6 @@ Marie-Caroline Fink, Adam Novotny, Jonah Spear
 
 The goal of this project was to transmit binary data using a signal that looks like a game of Pacman. We were ultimately successful in transmitting simple binary data, although our transmission times were quite slow given the constraints of our method.
 
-# Insert figure here showing transmission/results
-
 ## Background
 
 The goal of this project was to encode and transmit digital data in a way that the transmission signal is human-recognizable.
@@ -23,8 +21,6 @@ We focused on transmitting binary data using something more innocuous, namely sy
 ## Methods
 
 Our encoding scheme turns a sequence of bits into a sequence of pulses, which can then be turned back into bits after transmission using a cross correlation function.
-
-# Insert picture of 0s and 1s translated to symbols here
 
 ### Transmission
 
