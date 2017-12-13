@@ -62,6 +62,14 @@ One disadvantage of the sinc train above is that it can show up striped on a spe
 An alternative is to stack many cosines with a wide band of frequencies on top of each other to generate a signal that is 'hot' along the entire bandwidth. Each cosine would be scaled by the value of the slice of the image. Then the pulses could be appended together and smoothed with a raised cosine filter.
 
 
+### Decoding
+To decode the signal we are receiving, we convolve the signal with our different pulses so as to identify where and when each symbol is showing up. This convolve will result in a high amplitude when the symbol is found and lower when it is not. This can be seen here:
+
+INSERT
+
+In the above image the blue spikes are pacman and the green and blue spikes are ghosts. An envelope is created to find the location of each spike. It is then found whether or not the green and blue overlap, if it does its a ghost, if not its a pacman. Timing is found by transmitting the first four as ghosts to identify the interval inbetween spikes and then use that to find the other spikes. 
+
+
 ## Huffman Coding
 We implemented [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding) to compress text messages. Huffman encoding creates an optimal coding scheme, by analyzing the order of occurrence of symbols. We built our tree with text from [hipster ipsum](https://hipsum.co/), to get a similar symbol frequency to what we (being millenials) want to send.
 
