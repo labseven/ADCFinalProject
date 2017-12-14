@@ -12,6 +12,8 @@ The goal of this project was to transmit binary data using a signal that looks l
 
 The goal of this project was to encode and transmit digital data in a way that the transmission signal is human-recognizable.
 
+We send data by using pulses that look like images when viewed on a spectrogram.
+
 How does this work? A spectrogram is a graph which displays frequencies of a signal on the y axis and transmission time along the x axis. By varying the signal precisely, one can draw images in this way. This has been used to embed images in songs, as shown below (Aphex Twin's Equation).
 
 <img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/Equation_Aphex_Twin_Spectrogram.gif" alt="Spectrogram of Aphex Twin's Equation" width="1000" height="500">
@@ -24,11 +26,11 @@ Our encoding scheme turns a sequence of bits into a sequence of pulses, which ca
 
 ### Transmission
 
-Our goal is to transmit images, particularly those that look like pacman, ghosts, and dots on a spectrogram. A spectrogram is a graph that shows frequency on the y axis against time on the x axis. Amplitudes of different frequencies are shown using colors. Below are two signals plotted alongside their spectrogram; the first is a pure cosine and the second is a cosine with slowly varying frequency and noise added.
+Our goal is to transmit images, particularly those that look like pacman and ghosts on a spectrogram. A spectrogram is a graph that shows frequency on the y axis against time on the x axis. Amplitudes of different frequencies are shown using colors. Below are two signals plotted alongside their spectrogram; the first is a pure cosine and the second is a cosine with slowly varying frequency and noise added.
 
 <img src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/spectrogram_explanation.png" alt="Spectrogram Explanation">
 
-Our transmission method is as follows:
+Our signal generation method is as follows:
 1. Take the IFFT of 4 different images to generate 4 pulses (this only needs to be done once).
 2. Turn our data into 2-bit chunks.
 3. Map each chunk onto a different type of pulse and concatenate pulses together.
@@ -56,6 +58,9 @@ Again, the sincs in the above picture are superimposed only for clarity. In real
 Finally, when viewed on a spectrogram with box width equal to the length of each slice, we get the following image:
 
 <img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/media/reverseSpectrogram.png" alt="Pacman Spectrogram" width="800" height="700">
+
+![pulse train transmit](media/sendRecPacmanStream.png)
+> Transmit on top, received signal on bottom. Data looks good!
 
 One disadvantage of the sinc train above is that it can show up striped on a spectrogram. If the phase is off or the spectrogram is using a different window size, entire rows will be cold. This is because the higher frequency content is 'concentrated' in relatively few samples in the center of each sinc. If a sample does not include the peak then that line on the spectrogram will not show any energy.
 
@@ -105,7 +110,7 @@ This makes our packets 20 bits long, which is 5 samples.
 Sending one sample takes only 0.25 seconds, so our data rate is approximately 8 bps. This is about 50 times slower than hardware from the 80s. Short tweets can take 10 seconds to transmit, while sending a text message up to 160 characters takes only 2.5 minutes.
 (that is when using the _fast_ pulses, more artistic pulses can have a baud rate of down to 1/2)
 
-An advantage of the slowness is in reliability. Our system has an error rate of only {}.
+An advantage of the slowness is in reliability. It not only decreases error rate per bit,
 
 ## Conclusions
 We have explained how our radio transmission works, and have analyzed its performance.
