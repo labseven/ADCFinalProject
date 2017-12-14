@@ -68,11 +68,11 @@ An alternative is to stack many cosines with a wide band of frequencies on top o
 
 
 ### Decoding
-To decode the signal we are receiving, it is convolved with our different pulses so as to identify where and when each symbol is showing up. This convolve will result in a high amplitude when the symbol is found and lower when it is not. This can be seen here:
+To decode the signal we are receiving, it is convolved with our different pulses so as to identify where and when each symbol is showing up. This convolve will result in a high amplitude when the symbol is found and lower when it is not. This is the same as running it through a matched filter. This can be seen here:
 
 <img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/ConvolvedResults.png" alt="Convolved Results">
 
-In the above image the blue spikes are pacman and the green and blue spikes are ghosts. An envelope is created to find the location of each spike seen below for  It is then found whether or not the green and blue overlap, if it does its a ghost, if not its a pacman. Timing is found by transmitting the first four as ghosts to identify the interval inbetween spikes and then use that to find the other spikes. 
+In the image above, the blue spikes are pacman and the green and blue spikes are ghosts. An envelope is created to find the location of each spike (seen below) for it is then found whether or not the green and blue overlap, if it does its a ghost, if not its a pacman. Timing is found by transmitting a known header to identify the interval between spikes and then use that to find the other spikes.
 
 <img align="center" src="https://github.com/labseven/ADCFinalProject/blob/master/Report_Resources/EnvelopeGhost.png" alt="Finding Timing of Spikes">
 
@@ -87,8 +87,9 @@ Huffman coding creates a binary tree from bottom-up to be provably optimal.
 
 First we define a simple binary tree class, which holds a parent, left and right nodes, and (optionally) data.
 
-To generate a Huffman tree, first calculate the probability distribution of our symbols using the Counter library.
-Next, create a leaf for each symbol. The parameters of each leaf are as follows:
+To generate a Huffman tree, first calculate the probability distribution of the symbols using the Counter library.
+Next, start making the tree by creating a leaf for each symbol. The parameters of each leaf are as follows:
+
 ```
 weight = probability of the symbol
 data   = symbol
@@ -96,31 +97,33 @@ data   = symbol
 
 Next, sort the list by weight. Pop the two lowest weighted nodes and create a new parent node for them. The new node has the following properties:
 ```
-right & left = the two lowest weight nodes
-weight       = sum of the two children
+right & left = the lowest and second lowest weight nodes
+weight       = sum of the weights of the two children
 ```
 Insert this new node into a second list.
 Repeat this process of connecting the two lowest weighted nodes (looking at the ends of both lists) with a new node, until one node remains. This is the root of the Huffman tree.
 >Note: our implementation does not use two buffers. It has to resort the buffer every time. This is not optimal, but the speed loss in unnoticeable on a modern PC.
 
-To make encoding easier, we generate a dictionary of symbols to code with a depth first search of the tree, given only the root. Moving to the left node adds a `1` to the code and moving to the right adds a `0` to the code. To encode a message, we iterate through the characters in the message and append the code for each symbol to a bitstream.
+To make encoding easier, we generate a dictionary mapping symbols to their code with a depth first search of the tree, given only the root. Moving to the left node adds a `1` to the code and moving to the right adds a `0` to the code. To encode a message, we iterate through the characters in the message and append the code for each symbol to a bitstream.
 
 To decode a bitstream, we traverse the tree (moving left for `1` and right for `0`) until we hit a leaf. We append that leaf's symbol to the output string, and repeat the process (starting at the root) until we run out of bits.
+
+A big disadvantage to Huffman coding is that a single bit flip can corrupt all of the data after it.
 
 ### Packetization
 
 To improve reliability, we [packetize](https://en.wikipedia.org/wiki/Network_packet) our bitstream before sending.
 
-We chunk up the bitstream into 2 bytes per packet (16 bits). Then we append a known header [1, 0, 0].
+We chunk up the bitstream into 2 bytes per packet (16 bits). Then we append a known header [1, 0, 0] for timing and error detection.
 
-We add a parity bit to the end for detecting errors. A [parity bit](https://en.wikipedia.org/wiki/Parity_bit) makes makes the sum of the packet even. This way, we can detect up to one bit flip. Unfortunately, we have no way to communicate back to the transmitter to ask for a retransmission, so we must accept the data loss and move on with our lives.
+We add a parity bit to the end for detecting errors. A [parity bit](https://en.wikipedia.org/wiki/Parity_bit) makes makes the sum of the packet always even. This way, we can detect up to one bit flip. Unfortunately, we have no way to communicate back to the transmitter to ask for a retransmission, so we must accept the data loss and move on with our lives.
 
-This makes our packets 20 bits long, which is 5 samples.
+This makes our packets 20 bits long, which is 5 samples (when using 4 pulses).
 
 Sending one sample takes only 0.25 seconds, so our data rate is approximately 8 bps. This is about 50 times slower than hardware from the 80s. Short tweets can take 10 seconds to transmit, while sending a text message up to 160 characters takes only 2.5 minutes.
 (that is when using the _fast_ pulses, more artistic pulses can have a baud rate of down to 1/2)
 
-An advantage of the slowness is in reliability. It not only decreases error rate per bit,
+An advantage of the slowness is in reliability. Having many samples to compare to decreases error rate per bit, but also the system will not allow you to send many bits within your patience, so it has a limited number of bits that it can mess up on.
 
 ## Conclusions
-We have explained how our radio transmission works, and have analyzed its performance.
+We have created a radio transmission protocol that sends data in human recognizable form. It is unusably slow.
